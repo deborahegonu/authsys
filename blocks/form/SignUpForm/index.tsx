@@ -14,6 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   email: z.string()
@@ -28,6 +30,7 @@ const formSchema = z.object({
 })
 
 export function SignUpForm() {
+    const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,10 +42,30 @@ export function SignUpForm() {
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+    const response = await fetch('/api/user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': "application/json"
+        },
+        body: JSON.stringify({
+            email: values.email,
+            password: values.password
+        })
+       
+    })
+    console.log(response)
+    if(response.status === 201) {
+        
+        router.push('/my-account')
+    } else if(response.status === 409) {
+        toast('User already exists with this email.')
+    } else {
+        toast('Sign up failed! Please try again later.')
+    }
   }
 
   return (
