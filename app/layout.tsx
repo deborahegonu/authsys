@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner"
 import Link from "next/link";
+import { Header } from "@/blocks";
 
 
 const geistSans = Geist({
@@ -30,12 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header>
-          <nav>
-            <Link href={'/sign-in'}>Sign in</Link>
-            <Link href={'/my-account'}>Account</Link>
-          </nav>
-        </header>
+        <Header />
         {children}
         <footer>
           &copy; 2025 Auth System
