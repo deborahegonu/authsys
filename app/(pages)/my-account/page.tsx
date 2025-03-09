@@ -1,18 +1,29 @@
 import { auth } from "@/auth"
+// import { RedirectToSignIn } from "@/blocks/auth/RedirectToSignIn"
+import Link from "next/link"
+
+// import { prisma } from "@/prisma"
 
 export default async function MyAccountPage() {
     const session = await auth()
-
-    console.log(session)
+    
     if (!session?.user) {
         return(
-            <p>Please log in to view your account.</p>
+         <p className="text-center">Please <Link href={'/sign-in'} className="underline">sign in</Link> to view your account.</p>
         )
     }
+    
+    // const user = await prisma.user.findUnique({
+    //     where: {
+    //         email: 
+    //     }
+    // })
     return(
         <main>
-            <h1>My Account</h1>
-            <p>Hello user:{session.user?.email}</p>
+            <section className="px-12 py-5">
+                <h1>My Account</h1>
+                <p>User: {session?.user.email}</p>
+            </section>
         </main>
     )
 }

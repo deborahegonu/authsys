@@ -18,6 +18,7 @@ import { signIn } from "next-auth/react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
+
 const formSchema = z.object({
   email: z.string()
   .min(1, "Email is required.").email('Invalid email.'),
@@ -25,7 +26,7 @@ const formSchema = z.object({
   .min(1, "Password is required.").min(8, 'Password must have at least 8 characters.'),
 })
 
-export function SignInForm() {
+export const SignInForm = () => {
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,13 +44,12 @@ export function SignInForm() {
        password: values.password,
        redirect: false,
     })
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(signInData)
+    
     if(signInData?.error) {
       toast("Invalid credentials")
     } else {
       toast("Signing in...")
+      router.refresh()
       setTimeout(() => {
         router.push('/my-account')
       }, 500)
@@ -57,7 +57,7 @@ export function SignInForm() {
   }
 
   return (
-    <Form {...form}>
+      <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-sm">
         <FormField
           control={form.control}
@@ -66,7 +66,7 @@ export function SignInForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="deb@abc.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -79,7 +79,7 @@ export function SignInForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="shadcn" {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -88,5 +88,6 @@ export function SignInForm() {
         <Button type="submit">Sign In</Button>
       </form>
     </Form>
+    
   )
 }
