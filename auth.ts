@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { type DefaultSession } from "next-auth"
 import { ZodError } from "zod"
 import Credentials from "next-auth/providers/credentials"
 import { signInSchema } from "./lib/zod"
@@ -7,6 +7,26 @@ import { prisma } from "@/prisma"
 
 import type { User } from "@prisma/client";
 import { compare } from "bcrypt";
+import authConfig from "./auth.config"
+
+declare module "next-auth" {
+  /**
+   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
+    user: {
+      /** The user's postal address. */
+      address: string
+      /**
+       * By default, TypeScript merges new interface properties and overwrites existing ones.
+       * In this case, the default session user properties will be overwritten,
+       * with the new ones defined above. To keep the default session user properties,
+       * you need to add them back into the newly declared interface.
+       */
+    } & DefaultSession["user"]
+  }
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   pages: {
@@ -49,17 +69,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         },
     }),
   ],
-  callbacks: {
-    jwt({ token, user }) {
-      if (user) { // User is available during sign-in
-        token.id = user.id
-      }
-      return token
-    },
-    session({ session, token, user }) {
-      user.id = token.id
-      return session
-    },
+  session: {
+    strategy: "jwt",
+    ...authConfig
   },
-}
+  // callbacks: {
+  //   jwt({ token, user }) {
+  //     if (user) { // User is available during sign-in
+  //       token.id = user.id
+  //     }
+  //     return token
+  //   },
+  //   session({ session, token, user }) {
+  //     user.id = token.id
+  //     return session
+  //   },
+  // },
 })
