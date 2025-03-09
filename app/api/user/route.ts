@@ -39,9 +39,17 @@ export async function POST(req: Request) {
     })
 
     // return new user without password
-    const { password: newUserPassword, ...rest } = newUser;
+    // const { password: newUserPassword, ...rest } = newUser;
 
-    return NextResponse.json({ user: rest, message: "Sign up successful!"}, { status: 201 })
+    const user = {
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
+        image: newUser.image,
+        createdAt: newUser.createdAt
+    }
+
+    return NextResponse.json({ user: user, message: "Sign up successful!"}, { status: 201 })
    } catch(error) {
     return NextResponse.json({  message: error}, { status: 500 })
    }

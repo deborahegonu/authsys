@@ -1,5 +1,6 @@
 import { SignInForm } from "@/blocks";
 import Link from "next/link";
+import { CredentialsSignIn } from "@/blocks/form/Credentials";
 
 export default function Page() {
     return(
@@ -9,6 +10,7 @@ export default function Page() {
                 <p>Don&apos;t have an account? <Link href={'/sign-up'} className="text-blue-500 hover:underline">Sign up here</Link></p>
             </div>
             <SignInForm />
+            <CredentialsSignIn />
         </main>
     )
 }
