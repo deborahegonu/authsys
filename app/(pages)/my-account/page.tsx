@@ -6,8 +6,9 @@ import Link from "next/link"
 
 export default async function MyAccountPage() {
     const session = await auth()
-    
-    if (!session?.user) {
+    const user = session?.user
+    console.log('account user:', user)
+    if (!session) {
         return(
          <p className="text-center">Please <Link href={'/sign-in'} className="underline">sign in</Link> to view your account.</p>
         )
@@ -22,7 +23,7 @@ export default async function MyAccountPage() {
         <main>
             <section className="px-12 py-5">
                 <h1>My Account</h1>
-                <p>User: {session?.user.email}</p>
+                <p>User {user?.email}</p>
             </section>
         </main>
     )

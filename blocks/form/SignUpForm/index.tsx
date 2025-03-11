@@ -1,9 +1,8 @@
 "use client"
-
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -16,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import {LuLoaderCircle} from "react-icons/lu"
 
 const formSchema = z.object({
   email: z.string()
@@ -30,7 +30,8 @@ const formSchema = z.object({
 })
 
 export function SignUpForm() {
-    const router = useRouter();
+  const [isLoading, setIsLoading ] = useState<boolean>(false)
+  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,29 +44,35 @@ export function SignUpForm() {
  
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
-    const response = await fetch('/api/user', {
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/user', {
         method: 'POST',
         headers: {
             'Content-Type': "application/json"
         },
         body: JSON.stringify({
-            email: values.email,
-            password: values.password
+          email: values.email,
+          password: values.password
         })
-       
-    })
-    console.log(response)
-    if(response.status === 201) {
-        
-        router.push('/my-account')
-    } else if(response.status === 409) {
-        toast('User already exists with this email.')
-    } else {
-        toast('Sign up failed! Please try again later.')
-    }
+      })
+        if(response.status === 201) {
+          setIsLoading(false)
+          router.push('/my-account')
+        }
+        if(response.status === 409) {
+          setIsLoading(false)
+          toast('User already exists with this email.')
+        } else {
+          setIsLoading(false)
+          toast('Sign up failed! Please try again later.')
+        }
+      } catch(error) {
+        setIsLoading(false)
+        console.log(error)
+      } finally {
+        setIsLoading(false)
+      }
   }
 
   return (
@@ -110,7 +117,10 @@ export function SignUpForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Sign Up</Button>
+        <Button disabled={isLoading} type="submit" className="w-full">
+          {isLoading && <LuLoaderCircle className="animate-spin" />}
+          Sign Up
+        </Button>
       </form>
     </Form>
   )

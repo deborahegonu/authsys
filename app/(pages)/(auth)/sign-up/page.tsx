@@ -1,4 +1,5 @@
 import { GoogleSignIn, SignUpForm } from "@/blocks";
+import { DividerText } from "@/components/ui/dividerText";
 import Link from "next/link";
 
 export default function Page() {
@@ -9,9 +10,7 @@ export default function Page() {
                 <p>Already have an account? <Link href={'/sign-in'} className="text-blue-500 hover:underline">Sign in here</Link></p>
             </div>
             <SignUpForm />
-            <div>
-                or
-            </div>
+            <DividerText />
             <GoogleSignIn>Sign up with Google</GoogleSignIn>
         </main>
     )

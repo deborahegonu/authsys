@@ -4,6 +4,10 @@ import { useSearchParams } from "next/navigation"
  
 enum Error {
   Configuration = "Configuration",
+  AccessDenied = "Access Denied",
+  Verification = "Verification",
+  Default = "Default"
+
 }
  
 const errorMap = {
@@ -12,6 +16,27 @@ const errorMap = {
       There was a problem when trying to authenticate. Please contact us if this
       error persists. Unique error code:{" "}
       <code className="rounded-sm bg-slate-100 p-1 text-xs">Configuration</code>
+    </p>
+  ),
+  [Error.AccessDenied]: (
+    <p>
+      There was a problem when trying to authenticate. Please contact us if this
+      error persists. Unique error code:{" "}
+      <code className="rounded-sm bg-slate-100 p-1 text-xs">Access Denied</code>
+    </p>
+  ),
+  [Error.Verification]: (
+    <p>
+      There was a problem when trying to authenticate. Please contact us if this
+      error persists. Unique error code:{" "}
+      <code className="rounded-sm bg-slate-100 p-1 text-xs">Verification</code>
+    </p>
+  ),
+  [Error.Default]: (
+    <p>
+      There was a problem when trying to authenticate. Please contact us if this
+      error persists. Unique error code:{" "}
+      <code className="rounded-sm bg-slate-100 p-1 text-xs">Default</code>
     </p>
   ),
 }

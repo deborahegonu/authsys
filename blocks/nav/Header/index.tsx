@@ -7,6 +7,7 @@ import { LuLockKeyhole } from "react-icons/lu";
 export const Header = async () => {
     const session = await auth();
 
+    console.log(session)
     return(
         <header>
             <nav className="flex items-center justify-between px-12 py-5 border-b">
@@ -14,7 +15,7 @@ export const Header = async () => {
                     <LuLockKeyhole />
                     <span className="">systems</span>
                 </Link>
-                { session?.user ? <SignOutBtn /> :<SignInBtn /> }
+                { session ? <SignOutBtn /> :<SignInBtn /> }
             </nav>
         </header>
     )

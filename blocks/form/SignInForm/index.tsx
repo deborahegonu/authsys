@@ -57,7 +57,7 @@ export const SignInForm = () => {
   }
 
   return (
-      <Form {...form}>
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-sm">
         <FormField
           control={form.control}
@@ -85,7 +85,7 @@ export const SignInForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Sign In</Button>
+        <Button type="submit" className="w-full">Sign In</Button>
       </form>
     </Form>
     
